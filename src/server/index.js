@@ -8,7 +8,7 @@ import session from "express-session";
 import GoogleStrategy from "passport-google-oauth2";
 import env from "dotenv";
 
-const  app = express();
+const app = express();
 const port = process.env.REACT_APP_PORT;
 const saltRounds = 10;
 env.config();

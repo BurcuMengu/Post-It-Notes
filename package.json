@@ -13,8 +13,16 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
     "concurrently": "^9.1.0"
+  },
+  "browserslist": {
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
