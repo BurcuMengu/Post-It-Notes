@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
-import "./../public/styless.css";
+import App from "../src/components/App.jsx"
+import "../src/styles/styles.css";
 
 
 
