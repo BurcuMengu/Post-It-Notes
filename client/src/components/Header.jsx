@@ -3,11 +3,11 @@ import logo from "../assets/logo.png"
 
 function Header() {
     return(
-        <header>
-            <div>
-                <img src={logo} alt="Logo" />
-                <button>Login</button>
-                <button>Sign Up</button>
+        <header className="header">
+            <img src={logo} alt="Logo" className="img"/>
+            <div className="button-container">
+                <button className="button">Login</button>
+                <button className="button">Sign Up</button>
             </div>
         </header>
     );
