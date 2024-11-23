@@ -14,9 +14,11 @@
   "description": "",
   "dependencies": {
     "browserslist": "^4.24.2",
+    "build-scripts": "^2.1.2",
     "react-router-dom": "^5.2.0"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "concurrently": "^9.1.0"
   },
   "browserslist": {
