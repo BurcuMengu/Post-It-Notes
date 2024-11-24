@@ -27,13 +27,13 @@ function Note() {
     };
 
     return (
-        <div>
+        <div className="noteHeader">
             <h2>Your Notes</h2>
             <ul>
                 {notes.map(note => (
                     <li key={note.id}>
                         {note.content} 
-                        <button onClick={() => handleDelete(note.id)}>Delete</button>
+                        <button className="buttonNote" onClick={() => handleDelete(note.id)}>Delete</button>
                     </li>
                 ))}
             </ul>

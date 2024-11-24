@@ -52,8 +52,67 @@
     background-color: #9C884B; 
   }
 
+  .noteHeader {
+    width: 80%;
+    max-width: 700px;
+    margin: 50px auto;
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  .noteHeader h2 {
+    text-align: center;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+  }
   
- 
+  .buttonNote {
+    background-color: #1D1610;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+  .buttonNote:hover {
+      background-color: #9C884B;
+  }
+
+  .buttonNote:focus {
+      outline: none;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: #f9f9f9;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+  }
+
+  li:hover {
+    background-color: #f1f1f1;
+  }
+
+  li span {
+    font-size: 16px;
+    color: #555;
+  }
 
   footer {
     position: absolute;

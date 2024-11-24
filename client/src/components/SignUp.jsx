@@ -10,8 +10,8 @@ function SignUp() {
         event.preventDefault();
         // Kullanıcı kaydını API aracılığıyla yapacağız
         console.log("SignUp attempted with", email, password);
-        // Başarılı kayıt sonrası login sayfasına yönlendirme
-        history.push("/login");
+        // Başarılı kayıt sonrası note sayfasına yönlendirme
+        history.push("/notes");
     };
 
     return (
