@@ -1,8 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import logo from "../assets/logo.png"
-import SignUp from "./SignUp";
-import Login from "./Login";
 
 function HomePage() {
     const history = useHistory();

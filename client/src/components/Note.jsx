@@ -1,29 +1,24 @@
 import React, { useEffect, useState } from 'react';
+import { getNotes, deleteNote } from '../api.js';  // api.js dosyasındaki fonksiyonları import et
 
 function Note() {
     const [notes, setNotes] = useState([]);
 
     // When the component is mounted, fetch notes from the server
     useEffect(() => {
-        fetch('http://localhost:5000/api/notes', {
-            credentials: 'include', // To include session data (cookies)
-        })
-        .then(response => response.json())
-        .then(data => setNotes(data)) // Store fetched notes in the state
-        .catch(error => console.error('Error fetching notes:', error));
+        getNotes()  // api.js'deki getNotes fonksiyonunu kullan
+            .then(data => setNotes(data))  // Set notes to the state
+            .catch(error => console.error('Error fetching notes:', error));
     }, []);
 
     // Function to handle note deletion
     const handleDelete = (id) => {
-        fetch(`http://localhost:5000/api/notes/${id}`, {
-            method: 'DELETE', // DELETE request to remove the note
-            credentials: 'include', // Include session data (cookies)
-        })
-        .then(() => {
-            // Update the state by removing the deleted note
-            setNotes(notes.filter(note => note.id !== id)); 
-        })
-        .catch(error => console.error('Error deleting note:', error));
+        deleteNote(id)  // api.js'deki deleteNote fonksiyonunu kullan
+            .then(() => {
+                // Update the state by removing the deleted note
+                setNotes(notes.filter(note => note.id !== id)); 
+            })
+            .catch(error => console.error('Error deleting note:', error));
     };
 
     return (
