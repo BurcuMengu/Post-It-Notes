@@ -16,7 +16,7 @@ env.config();
 
 const { Pool } = pkg;  // Pool'u pkg üzerinden alıyoruz
 const app = express();
-const port = process.env.REACT_APP_PORT;
+const port = process.env.PORT;
 const saltRounds = 10;
 
 // PostgreSQL Pool bağlantısı
@@ -40,7 +40,7 @@ app.get('*', (req, res) => {
 // CORS ayarları
 app.use(cors({
     origin: process.env.REACT_APP_PORT, // React uygulamasının çalıştığı port
-    methods: 'GET,POST',
+    methods: 'GET,POST,PUT,DELETE',
     credentials: true
 }));
 
@@ -65,14 +65,17 @@ passport.use(new GoogleStrategy({
     callbackURL: "http://localhost:5000/auth/google/callback",
 }, (accessToken, refreshToken, profile, done) => {
     const { id, displayName, emails } = profile;
+    const firstName = profile.given_name;
+    const lastName = profile.family_name;
+
     pool.query('SELECT * FROM users WHERE google_id = $1', [id], (err, result) => {
         if (err) return done(err);
         if (result.rows.length > 0) {
             return done(null, result.rows[0]);
         } else {
             pool.query(
-                'INSERT INTO users (google_id, email, name) VALUES ($1, $2, $3) RETURNING *',
-                [id, emails[0].value, displayName],
+                'INSERT INTO users (google_id, first_name, last_name, email, registration_date) VALUES ($1, $2, $3, $4, NOW()) RETURNING *',
+                [id, firstName, lastName, emails[0].value,],
                 (err, result) => {
                     if (err) return done(err);
                     return done(null, result.rows[0]);
