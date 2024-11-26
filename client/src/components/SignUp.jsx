@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios"; // axios imported
 
 function SignUp() {
@@ -8,7 +8,7 @@ function SignUp() {
     const [firstName, setFirstName] = useState("");  // State for first name
     const [lastName, setLastName] = useState("");    // State for last name
     const [error, setError] = useState(""); // State for error message
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleSignUp = async (event) => {
         event.preventDefault();
@@ -24,7 +24,7 @@ function SignUp() {
 
             console.log("SignUp successful:", response.data);
             // Redirecting to the notes page after successful registration
-            history.push("/notes");
+            navigate("/notes");
         } catch (error) {
             console.error("SignUp failed:", error.response ? error.response.data : error.message);
             // Displaying error message

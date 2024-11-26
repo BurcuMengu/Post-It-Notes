@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"; 
-import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import axios from "axios";
 import Footer from "./Footer";
 import HomePage from "./HomePage";
@@ -27,22 +27,16 @@ function App() {
 
     return (
         <Router>
-            <Switch>
-                <Route exact path="/" component={HomePage} />
-                <Route path="/login" component={Login} />
-                <Route path="/signup" component={SignUp} />
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
                 <Route
                     path="/notes"
-                    render={() =>
-                        user ? (
-                            <Note user={user} />
-                        ) : (
-                            <Redirect to="/login" />  // Redirect non-logged-in users to the login page
-                        )
-                    }
+                    element={user ? <Note user={user} /> : <Navigate to="/login" />} // Redirect non-logged-in users to the login page
                 />
-                <Route path="/auth/google/callback" component={GoogleCallback} />
-            </Switch>
+                <Route path="/auth/google/callback" element={<GoogleCallback />} />
+            </Routes>
             <Footer />
         </Router>
     );

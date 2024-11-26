@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(""); // State for error message
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleLogin = async (event) => {
         event.preventDefault();
@@ -21,7 +21,7 @@ function Login() {
             console.log("Login successful:", response.data);
             
             // Redirecting to the main page after successful login
-            history.push("/notes");
+            navigate("/notes");
         } catch (error) {
             console.error("Login failed:", error.response ? error.response.data : error.message);
             // Displaying the error message

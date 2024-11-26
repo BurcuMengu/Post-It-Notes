@@ -33,32 +33,126 @@ pool.connect();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Serve React build folder statically
-app.use(express.static(path.join(__dirname, '../client/build')));
+app.use(express.static(path.join(__dirname, '..','client','build')));
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '..','client','build', 'index.html'));
 });
+
 
 // CORS settings
 app.use(cors({
-    origin: process.env.REACT_APP_URL, 
+    origin: 'http://localhost:3000', 
     methods: ['GET','POST','PUT','DELETE', 'OPTIONS'],
-    credentials: true
+    credentials: true,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'] // Include any custom headers you may need
 }));
+
+app.options('*', cors()); 
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Express session configuration
 app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: true,
+    cookie: {
+        secure: process.env.NODE_ENV,  // Secure cookie in production
+        httpOnly: true,
+        maxAge: 60 * 60 * 1000  // 1 hour validity
+    }
 }));
 
 // Passport settings
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+passport.use(new LocalStrategy({
+    usernameField: "email", // The email field in the form
+    passwordField: "password" // The password field in the form
+}, async (email, password, done) => {
+    try {
+        const client = await pool.connect();
+        const result = await client.query("SELECT * FROM users WHERE email = $1", [email]);
+
+        if (result.rows.length === 0) {
+            return done(null, false, { message: "Invalid credentials" });
+        }
+
+        const user = result.rows[0];
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return done(null, false, { message: "Invalid credentials" });
+        }
+
+        return done(null, user);
+    } catch (err) {
+        return done(err);
+    }
+}));
+
+/*
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    callbackURL: "http://localhost:5000/auth/google/callback",
+}, async (accessToken, refreshToken, profile, done) => {
+    const { id, displayName, emails } = profile;
+    const firstName = profile.given_name;
+    const lastName = profile.family_name;
+
+    try {
+        const client = await pool.connect();
+        const result = await client.query('SELECT * FROM users WHERE google_id = $1', [id]);
+
+        if (result.rows.length > 0) {
+            return done(null, result.rows[0]);
+        } else {
+            const newUser = await client.query(
+                'INSERT INTO users (google_id, first_name, last_name, email, registration_date) VALUES ($1, $2, $3, $4, NOW()) RETURNING *',
+                [id, firstName, lastName, emails[0].value]
+            );
+            return done(null, newUser.rows[0]);
+        }
+    } catch (err) {
+        return done(err);
+    }
+}));
+*/
+
+// Serialize user
+passport.serializeUser((user, done) => done(null, user.id));
+
+// Deserialize user
+passport.deserializeUser((id, done) => {
+    pool.query('SELECT * FROM users WHERE id = $1', [id], (err, result) => {
+        if (err) return done(err);
+        done(null, result.rows[0]);
+    });
+});
+
+/*
+// Google OAuth login route
+app.get('/auth/google', passport.authenticate('google', {
+    scope: ['email', 'profile'],
+}));
+
+// Google OAuth callback route
+app.get('/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/login' }),
+    (req, res) => {
+        res.redirect('http://localhost:3000/notes');
+    }
+);
+*/
+
+// API endpoints
+
+// Register endpoint
 app.post('/api/register', async (req, res) => {
     const { email, password, firstName, lastName } = req.body;
 
@@ -81,7 +175,15 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-app.post('/api/login', async (req, res) => {
+// Login endpoint using LocalStrategy
+app.post("/api/login", passport.authenticate("local", {
+    successRedirect: "/notes",
+    failureRedirect: "/login",
+    failureFlash: true
+}));
+
+// Login endpoint with custom logic
+app.post('/api/login', async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
@@ -113,90 +215,15 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
-passport.use(new LocalStrategy({
-    usernameField: "email", // The email field in the form
-    passwordField: "password" // The password field in the form
-}, async (email, password, done) => {
-    try {
-        const client = await pool.connect();
-        const result = await client.query("SELECT * FROM users WHERE email = $1", [email]);
 
-        if (result.rows.length === 0) {
-            return done(null, false, { message: "Invalid credentials" });
-        }
-
-        const user = result.rows[0];
-        const isMatch = await bcrypt.compare(password, user.password);
-
-        if (!isMatch) {
-            return done(null, false, { message: "Invalid credentials" });
-        }
-
-        return done(null, user);
-    } catch (err) {
-        return done(err);
-    }
-}));
-
-app.post("/api/login", passport.authenticate("local", {
-    successRedirect: "/notes",
-    failureRedirect: "/login",
-    failureFlash: true
-}));
-
-// Google OAuth 
-passport.use(new GoogleStrategy({
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:5000/auth/google/callback",
-}, async (accessToken, refreshToken, profile, done) => {
-    const { id, displayName, emails } = profile;
-    const firstName = profile.given_name;
-    const lastName = profile.family_name;
-
-    try {
-        const client = await pool.connect();
-        const result = await client.query('SELECT * FROM users WHERE google_id = $1', [id]);
-
-        if (result.rows.length > 0) {
-            return done(null, result.rows[0]);
-        } else {
-            const newUser = await client.query(
-                'INSERT INTO users (google_id, first_name, last_name, email, registration_date) VALUES ($1, $2, $3, $4, NOW()) RETURNING *',
-                [id, firstName, lastName, emails[0].value]
-            );
-            return done(null, newUser.rows[0]);
-        }
-    } catch (err) {
-        return done(err);
-    }
-}));
-
-// Serialize user
-passport.serializeUser((user, done) => done(null, user.id));
-
-// Deserialize user
-passport.deserializeUser((id, done) => {
-    pool.query('SELECT * FROM users WHERE id = $1', [id], (err, result) => {
-        if (err) return done(err);
-        done(null, result.rows[0]);
-    });
+// CORS settings for the /api/login route (in case you want to handle it separately)
+app.get('/api/login', cors({
+    origin: process.env.REACT_APP_URL, // Ensure this matches your frontend URL
+    methods: ['GET', 'POST'],
+    credentials: true
+}), (req, res) => {
+    res.redirect('http://localhost:5000/notes'); // Redirect after successful login
 });
-
-// Google OAuth login route
-app.get('/auth/google', passport.authenticate('google', {
-    scope: ['email', 'profile'],
-}));
-
-// Google OAuth callback route
-app.get('/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/login' }),
-    (req, res) => {
-        res.redirect('http://localhost:3000/notes');
-    }
-);
-
-// API endpoints
 
 // Get notes
 app.get('/api/notes', async (req, res) => {
@@ -253,6 +280,7 @@ app.delete('/api/notes/:id', async (req, res) => {
     }
 });
 
+// Check session endpoint
 app.get('/api/check-session', (req, res) => {
     if (req.isAuthenticated()) {  // Check login status with Passport.js
         res.json({ user: req.user });  // Send user info

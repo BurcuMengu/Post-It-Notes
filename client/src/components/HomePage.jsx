@@ -1,16 +1,16 @@
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png"
 
 function HomePage() {
-    const history = useHistory();
+    const navigate = useNavigate();
 
     const handleLogin = () => {
-        history.push("/login");
+        navigate("/login");
     };
 
     const handleSignUp = () => {
-        history.push("/signup");
+        navigate("/signup");
     };
 
     return(
