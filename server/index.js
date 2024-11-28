@@ -38,7 +38,6 @@ app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..','client','build', 'index.html'));
 });
 
-
 // CORS settings
 app.use(cors({
     origin: 'http://localhost:3000', 
@@ -46,8 +45,6 @@ app.use(cors({
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'] // Include any custom headers you may need
 }));
-
-app.options('*', cors()); 
 
 
 app.use(bodyParser.json());
@@ -215,7 +212,7 @@ app.post('/api/login', async (req, res, next) => {
     }
 });
 
-
+/*
 // CORS settings for the /api/login route (in case you want to handle it separately)
 app.get('/api/login', cors({
     origin: process.env.REACT_APP_URL, // Ensure this matches your frontend URL
@@ -224,6 +221,7 @@ app.get('/api/login', cors({
 }), (req, res) => {
     res.redirect('http://localhost:5000/notes'); // Redirect after successful login
 });
+*/
 
 // Get notes
 app.get('/api/notes', async (req, res) => {
@@ -280,6 +278,7 @@ app.delete('/api/notes/:id', async (req, res) => {
     }
 });
 
+
 // Check session endpoint
 app.get('/api/check-session', (req, res) => {
     if (req.isAuthenticated()) {  // Check login status with Passport.js
@@ -289,7 +288,9 @@ app.get('/api/check-session', (req, res) => {
     }
 });
 
+
 // Start the server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
+

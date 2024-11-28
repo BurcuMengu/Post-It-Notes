@@ -2,42 +2,42 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
-  }
+}
   
-  html {
+html {
     font-family: "Montserrat", sans-serif;
-  }
+}
 
-  body {
+body {
     background: #eee;
     background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
     padding: 0 16px;
-  }
+}
 
-  .header {
+.header {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     height: 100vh; 
     text-align: center;
-  }
+}
 
-  .button-container {
+.button-container {
     display: flex;
     align-items: center;
     flex-direction: row;
     gap: 15px; 
-  }
+}
 
-  .img {
+.img {
     max-width: 400px; 
     height: auto;
     margin-bottom: 10px; 
-  }
+}
 
 
-  .button {
+.button {
     display: flex;
     padding: 10px 20px;
     font-size: 14px;
@@ -46,13 +46,13 @@
     background-color: #1D1610;
     color: #fff;
     transition: background-color 0.3s ease;
-  }
+}
 
-  .button:hover {
+.button:hover {
     background-color: #9C884B; 
-  }
+}
 
-  .noteHeader {
+.noteHeader {
     width: 80%;
     max-width: 700px;
     margin: 50px auto;
@@ -60,16 +60,16 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  }
+}
 
-  .noteHeader h2 {
+.noteHeader h2 {
     text-align: center;
     font-size: 28px;
     color: #333;
     margin-bottom: 20px;
-  }
+}
   
-  .buttonNote {
+.buttonNote {
     background-color: #1D1610;
     color: #fff;
     border: none;
@@ -79,21 +79,21 @@
     transition: background-color 0.3s ease;
 }
 
-  .buttonNote:hover {
+.buttonNote:hover {
       background-color: #9C884B;
-  }
+}
 
-  .buttonNote:focus {
+.buttonNote:focus {
       outline: none;
-  }
+}
 
-  ul {
+ul {
     list-style: none;
     padding: 0;
     margin: 0;
-  }
+}
 
-  li {
+li {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -103,22 +103,157 @@
     border-radius: 8px;
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
     transition: background-color 0.3s ease;
-  }
+}
 
-  li:hover {
+li:hover {
     background-color: #f1f1f1;
-  }
+}
 
-  li span {
+li span {
     font-size: 16px;
     color: #555;
-  }
+}
 
-  footer {
+
+
+
+
+.signup, .login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; 
+  background-color: #eee;
+  background-image: url("https://www.transparenttextures.com/patterns/cubes.png"); 
+  font-family: Arial, sans-serif;
+}
+
+.signup h2, .login h2 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.signup form, .login form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #eee;
+  background-image: url("https://www.transparenttextures.com/patterns/cubes.png");
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.signup form div, .login form div {
+  margin-bottom: 15px;
+}
+
+.signup form input, .login form input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.signup form input:focus, .login form input:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.signup form button, .login form button {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  background-color: #1D1610;;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup form button:hover, .login form button:hover {
+  background-color: #9C884B;
+}
+
+.error-message {
+  margin-top: 15px;
+  color: #ff4d4f;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+
+
+
+footer {
     position: absolute;
     text-align: center;
     bottom: 0;
     width: 100%;
     height: 2.5rem;
+}
+
+
+
+@media (max-width: 768px) {
+
+  /* HomePage: Button Container */
+  .button-container {
+      flex-direction: column; 
+      gap: 15px; 
   }
 
+  /* SignUp and Login: Forms */
+  .signup form, .login form {
+      width: 90%; 
+      padding: 15px; 
+  }
+
+  /* Adjust heading sizes */
+  .signup h2, .login h2, .header h2 {
+      font-size: 1.5rem; 
+  }
+
+  /* Input Fields */
+  .signup form input, .login form input {
+      font-size: 0.9rem; 
+  }
+
+  .signup form button, .login form button {
+      font-size: 0.9rem; 
+  }
+}
+
+
+/* For screens smaller than 480px (mobile screens) */
+@media (max-width: 480px) {
+
+  /* HomePage: Logo */
+  .header .img {
+      max-width: 150px; 
+  }
+
+  /* HomePage: Button Container */
+  .button-container {
+      width: 100%;
+      max-width: none; 
+  }
+
+  /* SignUp and Login: Forms */
+  .signup form, .login form {
+      padding: 10px; 
+  }
+
+  /* SignUp and Login: Inputs and Buttons */
+  .signup form input, .login form input,
+  .signup form button, .login form button {
+      font-size: 0.8rem; 
+  }
+}
