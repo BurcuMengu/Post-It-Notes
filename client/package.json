@@ -13,6 +13,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@react-oauth/google": "^0.12.1",
     "axios": "^1.7.7",
     "browserslist": "^4.24.2",
     "react": "^18.3.1",
