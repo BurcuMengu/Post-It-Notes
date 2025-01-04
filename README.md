@@ -12,7 +12,7 @@ Features
 Technologies Used
 
     Client: HTML, CSS, JavaScript, React
-    Server: Node.js, Express.js
+    Server: Node.js, Express.js, RESTful APIs
     Database: (PostgreSQL)
 
 Installation
