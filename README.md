@@ -11,7 +11,7 @@ Features
 
 Technologies Used
 
-    Client: HTML, CSS, JavaScript
+    Client: HTML, CSS, JavaScript, React
     Server: Node.js, Express.js
     Database: (PostgreSQL)
 
