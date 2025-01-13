@@ -1,11 +1,11 @@
 {
   "name": "full-stack-mastery-bootcamp",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "type": "module",
   "scripts": {
     "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "node server/index.js",
+    "server": "node server/server.js",
     "client": "npm start --prefix client"
   },
   "keywords": [],
