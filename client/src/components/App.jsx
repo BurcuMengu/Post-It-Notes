@@ -24,6 +24,43 @@ function App() {
 
         checkLoggedIn(); // Check login status when the page loads
     }, []);
+    
+    // Set up WebSocket connection when the component mounts
+    useEffect(() => {
+        if (user) {
+            const ws = new WebSocket('ws://localhost:8080'); // Replace with your WebSocket server URL
+
+            ws.onopen = () => {
+                console.log('WebSocket bağlantısı açıldı.');
+                ws.send(JSON.stringify({ type: 'authenticate', userId: user.id }));
+            };
+
+            ws.onmessage = (event) => {
+                const message = JSON.parse(event.data);
+                setMessages((prevMessages) => [...prevMessages, message]);
+                console.log('Yeni mesaj alındı:', message);
+            };
+
+            ws.onclose = () => {
+                console.log('WebSocket bağlantısı kapandı.');
+            };
+
+            ws.onerror = (error) => {
+                console.error('WebSocket hatası:', error);
+            };
+
+            // Save the WebSocket connection to state
+            setSocket(ws);
+
+            return () => {
+                // Cleanup WebSocket connection when the component unmounts
+                if (ws) {
+                    ws.close();
+                }
+            };
+        }
+    }, [user]); // WebSocket connection is established only when a user is logged in
+
 
     return (
         <Router>

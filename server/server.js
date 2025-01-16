@@ -1,5 +1,5 @@
 import express from "express";
-import cors from 'cors';
+import cors from "cors";
 import pkg from 'pg'; // Default import of the pg module
 import bodyParser from "body-parser";
 import path from "path";
@@ -10,6 +10,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import env from "dotenv";
+import { WebSocketServer } from "ws";
+import http from "http";
 
 env.config();
 
@@ -29,6 +31,13 @@ const pool = new Pool({
 
 pool.connect();
 
+const corsOptions = {
+    origin: process.env.REACT_APP_URL,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true,
+};
+app.use(cors(corsOptions));
+
 // Get the directory name in ES modules
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -38,13 +47,7 @@ app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '..','client','build', 'index.html'));
 });
 
-// CORS settings
-app.use(cors({
-    origin: 'http://localhost:3000', 
-    methods: ['GET','POST','PUT','DELETE', 'OPTIONS'],
-    credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'] // Include any custom headers you may need
-}));
+
 
 
 app.use(bodyParser.json());
@@ -289,8 +292,32 @@ app.get('/api/check-session', (req, res) => {
 });
 
 
+// WebSocket Setup
+const server = http.createServer(app);
+const wss = new WebSocketServer({ server });
+
+wss.on('connection', (ws) => {
+    console.log('WebSocket connection established');
+
+    ws.on('message', (message) => {
+        console.log('Received:', message);
+
+        // Broadcast the message to all connected clients
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocketServer.OPEN) {
+                client.send(message);
+            }
+        });
+    });
+
+    ws.on('close', () => {
+        console.log('WebSocket connection closed');
+    });
+});
+
+
 // Start the server
-app.listen(port, () => {
+server.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });
 
