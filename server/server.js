@@ -215,16 +215,6 @@ app.post('/api/login', async (req, res, next) => {
     }
 });
 
-/*
-// CORS settings for the /api/login route (in case you want to handle it separately)
-app.get('/api/login', cors({
-    origin: process.env.REACT_APP_URL, // Ensure this matches your frontend URL
-    methods: ['GET', 'POST'],
-    credentials: true
-}), (req, res) => {
-    res.redirect('http://localhost:5000/notes'); // Redirect after successful login
-});
-*/
 
 // Get notes
 app.get('/api/notes', async (req, res) => {
