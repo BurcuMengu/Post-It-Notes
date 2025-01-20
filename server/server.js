@@ -10,7 +10,7 @@ import { Strategy as LocalStrategy } from "passport-local";
 import session from "express-session";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import env from "dotenv";
-import { WebSocketServer } from "ws";
+import WebSocket from "ws";
 import http from "http";
 
 env.config();
@@ -284,7 +284,7 @@ app.get('/api/check-session', (req, res) => {
 
 // WebSocket Setup
 const server = http.createServer(app);
-const wss = new WebSocketServer({ server });
+const wss = new WebSocket.Server({ server });
 
 wss.on('connection', (ws) => {
     console.log('WebSocket connection established');
