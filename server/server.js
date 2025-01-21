@@ -15,7 +15,7 @@ import http from "http";
 
 env.config();
 
-const { Pool } = pkg;  
+const { Pool } = pkg;
 const app = express();
 const port = process.env.PORT;
 const saltRounds = 10;
@@ -42,9 +42,9 @@ app.use(cors(corsOptions));
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // Serve React build folder statically
-app.use(express.static(path.join(__dirname, '..','client','build')));
+app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '..','client','build', 'index.html'));
+    res.sendFile(path.resolve(__dirname, '..', 'client', 'build', 'index.html'));
 });
 
 
