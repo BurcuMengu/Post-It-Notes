@@ -31,22 +31,22 @@ function App() {
             const ws = new WebSocket('ws://localhost:8080'); // Replace with your WebSocket server URL
 
             ws.onopen = () => {
-                console.log('WebSocket bağlantısı açıldı.');
+                console.log('WebSocket connection opened.');
                 ws.send(JSON.stringify({ type: 'authenticate', userId: user.id }));
             };
 
             ws.onmessage = (event) => {
                 const message = JSON.parse(event.data);
                 setMessages((prevMessages) => [...prevMessages, message]);
-                console.log('Yeni mesaj alındı:', message);
+                console.log('New message received:', message);
             };
 
             ws.onclose = () => {
-                console.log('WebSocket bağlantısı kapandı.');
+                console.log('WebSocket connection closed.');
             };
 
             ws.onerror = (error) => {
-                console.error('WebSocket hatası:', error);
+                console.error('WebSocket error:', error);
             };
 
             // Save the WebSocket connection to state

@@ -308,6 +308,6 @@ wss.on('connection', (ws) => {
 
 // Start the server
 server.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+    console.log(`Server running at http://localhost:${port}`);
 });
 
